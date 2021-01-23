@@ -9,6 +9,7 @@ class Results extends Component{
       numberOfNominations: 0
     }
     this.nominateResult = this.nominateResult.bind(this);
+    this.removeNomination = this.removeNomination.bind(this)
   }
 
   nominateResult = (evt) => {
