@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import Nominations from "./Nominations";
+import { connect } from 'react-redux';
 
-class Results extends Component{
+
+const mapStateToProps = state => {
+  return { results: state.results }
+}
+
+export class Results extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -63,4 +69,4 @@ class Results extends Component{
 
 }
 
-export default Results
+export default connect(mapStateToProps)(Results)

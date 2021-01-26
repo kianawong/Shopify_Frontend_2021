@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import searchSubmission from "../OMDbAPI";
-import Results from "./Results";
+import { connect } from 'react-redux';
+import { setResultsThunk } from '../reducers/index'
 
-class Searchbar extends Component{
-  constructor(props){
-    super(props);
+
+export class Searchbar extends Component{
+  constructor(){
+    super();
     this.state = {
       search: "",
-      results: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -20,30 +20,9 @@ class Searchbar extends Component{
     });
   }
 
-  handleSubmit = async(evt) => {
+  async handleSubmit(evt){
     evt.preventDefault();
-    try{
-     const searchResults = await searchSubmission.get(
-        `"${this.state.search}"&apikey=2b7a9dff`
-     );
-
-     if(searchResults.data.Search){
-        this.setState({
-          ...this.state,
-          results: searchResults.data.Search
-        })
-     } else {
-        this.setState({
-          ...this.state,
-          results: []
-        })
-     }
-
-    } catch(err){
-      console.log(err);
-    }
-
-
+    await this.props.setResults(this.state.search);
   }
 
   render(){
@@ -53,11 +32,17 @@ class Searchbar extends Component{
           <input placeholder="Enter Search Term" value={this.state.search} onChange={this.handleChange}/>
           <button type="submit" disabled={!this.state.search}> button </button>
         </form>
-        { this.state.results.length > 0 && <Results results={this.state.results}/> }
       </div>
     )
   }
 
 }
 
-export default Searchbar;
+const mapDispatchToProps = dispatch => {
+  return {
+   setResults: (search) => dispatch(setResultsThunk(search))
+  }
+}
+
+export const Search = connect(null, mapDispatchToProps)(Searchbar)
+export default Search
