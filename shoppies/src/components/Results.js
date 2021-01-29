@@ -1,58 +1,42 @@
 import React, { Component } from "react";
-import Nominations from "./Nominations";
 import { connect } from 'react-redux';
-
+import { addNominationThunk } from '../reducers'
 
 const mapStateToProps = state => {
-  return { results: state.results }
+  return { results: state.results,
+           nominations: state.nominations
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addNomination: (nomination) => dispatch(addNominationThunk(nomination))
+  }
 }
 
 export class Results extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      nominations: {},
-      numberOfNominations: 0
-    }
+  constructor(){
+    super();
     this.nominateResult = this.nominateResult.bind(this);
-    this.removeNomination = this.removeNomination.bind(this)
   }
 
-  nominateResult = (evt) => {
+
+  nominateResult = async (evt) => {
     evt.preventDefault();
-    if(this.state.numberOfNominations < 5 && !(evt.target.value in this.state.nominations)){
+    const numOfNominations = Object.keys(this.props.nominations).length
+    if(numOfNominations < 5 && !(evt.target.value in this.props.nominations)){
       const newPair = {};
       newPair[evt.target.value] = true;
-      this.setState({
-        nominations: {...this.state.nominations, ...newPair},
-        numberOfNominations: this.state.numberOfNominations+1
-      })
+      await this.props.addNomination(newPair);
     }
   }
-
-  removeNomination = (evt) => {
-    evt.preventDefault();
-    if(evt.target.value in this.state.nominations){
-      const newNominationsList = {...this.state.nominations};
-      delete newNominationsList[evt.target.value];
-      this.setState({
-        nominations: newNominationsList,
-        numberOfNominations: this.state.numberOfNominations-1
-      })
-    }
-  }
-
 
   render(){
     const results = this.props.results
     return(
 
       <div>
-        <div>
-          { this.state.numberOfNominations > 0 &&
-          <Nominations nominations={ this.state.nominations } removeNomination={ this.removeNomination }/> }
-        </div>
-
+        Results
         <ul>
         { results.map((value,index) => {
           return <li key={index}>
@@ -69,4 +53,4 @@ export class Results extends Component{
 
 }
 
-export default connect(mapStateToProps)(Results)
+export default connect(mapStateToProps,mapDispatchToProps)(Results)

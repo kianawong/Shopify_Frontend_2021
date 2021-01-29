@@ -2,9 +2,6 @@ import { combineReducers } from 'redux'
 import searchSubmission from "../OMDbAPI";
 export const SET_RESULTS = 'SET_RESULTS';
 export const CLEAR_RESULTS = 'CLEAR_RESULTS';
-export const GET_RESULTS = 'GET_RESULTS';
-
-export const GET_NOMINATIONS = 'GET_NOMINATIONS';
 export const ADD_NOMINATION = 'ADD_NOMINATION';
 export const REMOVE_NOMINATION = 'REMOVE_NOMINATION';
 
@@ -13,16 +10,9 @@ export const setResults = (results) => ({
   results
 })
 
-export const getResults = () => ({
-  type: GET_RESULTS
-})
 
 export const clearResults = () => ({
   type: CLEAR_RESULTS,
-})
-
-export const getNominations = () => ({
-  type: GET_NOMINATIONS
 })
 
 export const addNomination = nomination => ({
@@ -41,8 +31,6 @@ function resultsReducer(results = [], action){
         return action.results
     case CLEAR_RESULTS:
       return results
-    case GET_RESULTS:
-      return results
     default:
       return results
   }
@@ -50,8 +38,6 @@ function resultsReducer(results = [], action){
 
 function nominationsReducer(nominations = {}, action){
   switch( action.type ){
-    case GET_NOMINATIONS:
-      return nominations
     case ADD_NOMINATION:
       return {...nominations, ...action.nomination}
     case REMOVE_NOMINATION:
@@ -84,23 +70,13 @@ export const setResultsThunk = (search) => {
 
 }
 
-export const getResultsThunk = () => {
-  return dispatch => {
-    dispatch(getResults())
-  }
-}
 
 export const clearResultsThunk = () => {
-  return dispatch => {
-    dispatch(clearResults())
+  return async dispatch => {
+    await dispatch(clearResults())
   }
 }
 
-export const getNominationsThunk = () => {
-  return dispatch => {
-    dispatch(getNominations())
-  }
-}
 
 export const addNominationThunk = nomination => {
   return dispatch => {

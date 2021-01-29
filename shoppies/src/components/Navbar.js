@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
-  BrowserRouter as Router,
-  Switch,
+  HashRouter,
   Route,
   Link
 } from "react-router-dom";
@@ -11,7 +10,7 @@ import Home from "./Home";
 
 function Navbar(){
   return (
-    <Router>
+    <HashRouter>
       <div>
         <nav>
           <ul>
@@ -22,12 +21,10 @@ function Navbar(){
         </nav>
       </div>
 
-      <Switch>
         <Route path="/" component={Home}/>
         <Route path="/nominations" component={Nominations}/>
         <Route path="/results" component={Results}/>
-      </Switch>
-    </Router>
+    </HashRouter>
   )
 }
 export default Navbar;
