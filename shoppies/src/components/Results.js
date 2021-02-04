@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { addNominationThunk } from '../reducers'
+import { Link } from "react-router-dom";
 
 const mapStateToProps = state => {
   return { results: state.results,
@@ -40,7 +41,13 @@ export class Results extends Component{
         <ul>
         { results.map((value,index) => {
           return <li key={index}>
-            {value.Title}
+            <Link to={{
+              pathname: `/results/${value.Title}`,
+              state: {
+                movie: value,
+                nominateResult: this.nominateResult
+              }
+              }}>{value.Title}</Link>
             <button value={value.Title} onClick={this.nominateResult}>
               Nominate
             </button>
